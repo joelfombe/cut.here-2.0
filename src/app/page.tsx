@@ -4,15 +4,14 @@ import { useRef, useState } from "react";
 
 export default function Home() {
     const [copySuccess, setCopySuccess] = useState("");
-    const [link, setLink] = useState("");
-
     const inputRef = useRef(null);
 
     const copyLink = () => {
-        // Acessando o valor do input através da ref
         const value: any = inputRef.current?.value;
         copyToClipBoard(value);
-        console.log(value);
+        setTimeout(() => {
+            setCopySuccess("");
+        }, 2000);
     };
 
     const copyToClipBoard = async (copyMe: any) => {
