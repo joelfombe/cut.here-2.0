@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
 
 const createUrl = new Schema({
     shortUrl: {
@@ -16,4 +16,4 @@ const createUrl = new Schema({
     },
 });
 
-export const createurl = model("createUrl", createUrl);
+export const createurl = mongoose.models.createUrl || model("createUrl", createUrl);
