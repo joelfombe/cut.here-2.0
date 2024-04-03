@@ -3,8 +3,11 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 import connectMongoDB from "@/lib/mongodb";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React from "react";
 const queryClient = new QueryClient();
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
@@ -34,7 +37,12 @@ export default function RootLayout({
     return (
         <QueryClientProvider client={queryClient}>
             <html lang="en">
-                <body className={poppins.className}>{children}</body>
+                <body className={poppins.className}>
+                    <React.Fragment>
+                        <ToastContainer />
+                    </React.Fragment>
+                    {children}
+                </body>
             </html>
         </QueryClientProvider>
     );
