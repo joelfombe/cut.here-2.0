@@ -8,7 +8,6 @@ import Image from "next/image";
 import pulse from "../../public/pulse-multiple.svg";
 import axiosShortLink from "@/lib/axios";
 import { toast, Bounce } from "react-toastify";
-import { getHostName } from "@/services/getHostName";
 
 type Inputs = {
     shortUrl: string;
@@ -23,11 +22,13 @@ export default function Home() {
         watch,
         formState: { errors },
     } = useForm<Inputs>();
-    const onSubmit: SubmitHandler<Inputs> = (newLink) => {
+    const onSubmit: SubmitHandler<Inputs> = ({ shortUrl, url }) => {
+        const textoLimpo = shortUrl
+            .replace(/[^\w\s]|_/g, "")
+            .replace(/\s+/g, "_");
         // newLink.preventDefault();
         toast.info("Creating link...");
-        console.log(newLink);
-        mutation.mutate(newLink);
+        mutation.mutate({ shortUrl: textoLimpo, url: url });
     };
 
     const mutation = useMutation({
@@ -97,7 +98,6 @@ export default function Home() {
                                 placeholder="Enter your Short link here..."
                                 {...register("shortUrl", { required: true })}
                             />
-                            {/* teste */}
                             <div className="p-3 focus-within:ring-1 focus-within:border-orange-500 focus-within:ring-orange-500 gap-1 flex items-center justify-center rounded-full border-2 border-black w-72 min-w-44 max-w-96 ">
                                 <input
                                     className="w-[60px] h-full"
@@ -112,21 +112,15 @@ export default function Home() {
                                     {...register("url", { required: true })}
                                 />
                             </div>
-                            {/* end */}
                             <button
                                 onClick={() => {}}
                                 className="bg-orange-500 hover:bg-orange-600 p-3 rounded-full font-semibold flex items-center justify-center"
                             >
-                                {/* {isLoading ? (
-                                // eslint-disable-next-line @next/next/no-img-element
-
-                            ) : null} */}
                                 {mutation.isPending ? (
                                     <Image src={pulse} alt="loading" />
                                 ) : (
                                     "Create Link"
                                 )}
-                                {/* <Image src={pulse} alt="loading" /> */}
                             </button>
                             {mutation.isSuccess ? (
                                 <div className="p-1 gap-1 flex items-center justify-center rounded-full border-2 border-orange-500 w-72 min-w-44 max-w-96 ">
